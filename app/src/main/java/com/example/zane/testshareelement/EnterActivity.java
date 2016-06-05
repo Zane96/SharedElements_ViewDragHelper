@@ -2,16 +2,10 @@ package com.example.zane.testshareelement;
 
 import android.annotation.TargetApi;
 import android.app.SharedElementCallback;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +15,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -39,8 +34,8 @@ public class EnterActivity extends AppCompatActivity{
     private static final String TAG = EnterActivity.class.getSimpleName();
 
     private ImageView imageView;
-    private LinearLayout layout;
     private EasyDragHelper easyDragHelper;
+    private TextView textView;
     private static final String IMAGE_ENTER_NAME = "image_enter";
     private SharedElementCallback mCallBack;
     private String imageName;
@@ -68,15 +63,14 @@ public class EnterActivity extends AppCompatActivity{
         initCallBack();
 
         imageView = (ImageView) findViewById(R.id.image_enter);
+        textView = (TextView) findViewById(R.id.text_enter);
         easyDragHelper = (EasyDragHelper) findViewById(R.id.drag_helper);
-        layout = (LinearLayout) findViewById(R.id.layout_enter);
         imageName = getIntent().getStringExtra(MainActivity.POSITION);
 
         easyDragHelper.setCallback(new EasyDragHelper.Callback() {
             @Override
             public void onDisappear(int direct) {
                 isDisappear = true;
-                isReturn = true;
                 finish();
             }
         });
@@ -105,6 +99,7 @@ public class EnterActivity extends AppCompatActivity{
                 return true;
             }
         });
+        
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -115,6 +110,9 @@ public class EnterActivity extends AppCompatActivity{
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
                 if (isReturn){
+                    //如果不这样设置会导致闪烁一下,可能是因为捕捉状态的时候把textview也捕捉进去了,目前还不知道
+                    //怎么解决。。。。
+                    textView.setAlpha(0f);
                     Log.i(TAG, "return");
                     imageView = getImageView();
                     if (imageView == null){
@@ -123,6 +121,7 @@ public class EnterActivity extends AppCompatActivity{
                         sharedElements.clear();
                     }
                 } else {
+                    textView.setAlpha(0f);
                     Log.i(TAG, "enter");
                 }
             }

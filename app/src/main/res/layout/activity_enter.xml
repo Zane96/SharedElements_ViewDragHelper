@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<FrameLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:id="@+id/layout_enter"
@@ -9,37 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hahaha"
-        android:textSize="24sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hahaha"
-        android:textSize="24sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hahaha"
-        android:textSize="24sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hahaha"
-        android:textSize="24sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hahaha"
-        android:textSize="24sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hahaha"
-        android:textSize="24sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hahaha"
-        android:textSize="24sp"/>
+        android:id="@+id/text_enter"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"/>
+
     <com.example.zane.testshareelement.EasyDragHelper
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/drag_helper"
@@ -59,4 +30,4 @@
             android:textSize="24sp"/>
 
     </com.example.zane.testshareelement.EasyDragHelper>
-</LinearLayout>
+</FrameLayout>
