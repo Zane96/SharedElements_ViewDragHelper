@@ -2,18 +2,25 @@ package com.example.zane.testshareelement;
 
 import android.annotation.TargetApi;
 import android.app.SharedElementCallback;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Transition;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -29,11 +36,16 @@ import java.util.Map;
 
 public class EnterActivity extends AppCompatActivity{
 
+    private static final String TAG = EnterActivity.class.getSimpleName();
+
     private ImageView imageView;
-    private static final String TAG = "EnterActivity";
+    private LinearLayout layout;
+    private EasyDragHelper easyDragHelper;
     private static final String IMAGE_ENTER_NAME = "image_enter";
     private SharedElementCallback mCallBack;
     private String imageName;
+    private boolean isReturn;
+    private boolean isDisappear;
 
     private Callback callback = new Callback() {
         @Override
@@ -51,11 +63,23 @@ public class EnterActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter);
+        //因为现在onCreat()是enter状态,所以直接推迟绘制
+        postponeEnterTransition();
         initCallBack();
 
         imageView = (ImageView) findViewById(R.id.image_enter);
-        //imageView.setImageResource(R.drawable.avatar);
+        easyDragHelper = (EasyDragHelper) findViewById(R.id.drag_helper);
+        layout = (LinearLayout) findViewById(R.id.layout_enter);
         imageName = getIntent().getStringExtra(MainActivity.POSITION);
+
+        easyDragHelper.setCallback(new EasyDragHelper.Callback() {
+            @Override
+            public void onDisappear(int direct) {
+                isDisappear = true;
+                isReturn = true;
+                finish();
+            }
+        });
 
         RequestCreator requestCreator;
         if (imageName.equals(MainActivity.IMAGE_NAME_1)){
@@ -65,6 +89,7 @@ public class EnterActivity extends AppCompatActivity{
             requestCreator = Picasso.with(this).load(Constant.URL_2);
             imageView.setTransitionName(MainActivity.IMAGE_NAME_2);
         }
+
         requestCreator.into(imageView, callback);
     }
 
@@ -84,28 +109,36 @@ public class EnterActivity extends AppCompatActivity{
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void initCallBack(){
-        //因为现在onCreat()是enter状态,所以直接推迟绘制
-        postponeEnterTransition();
         //防止闪屏
         getWindow().setEnterTransition(null);
         mCallBack = new SharedElementCallback() {
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                imageView = getImageView();
-                if (imageView == null){
-                    names.clear();
-                    sharedElements.clear();
+                if (isReturn){
+                    Log.i(TAG, "return");
+                    imageView = getImageView();
+                    if (imageView == null){
+                        Log.i(TAG, "null");
+                        names.clear();
+                        sharedElements.clear();
+                    }
+                } else {
+                    Log.i(TAG, "enter");
                 }
             }
         };
         setEnterSharedElementCallback(mCallBack);
     }
 
+
+
     /**
      * 在这个activity完成跳转,即将退出(exit)的时候回调这个方法
      */
     @Override
     public void finishAfterTransition() {
+        Log.i(TAG, "return");
+        isReturn = true;
         Intent intent = new Intent();
         intent.putExtra(MainActivity.POSITION, imageName);
         setResult(RESULT_OK, intent);

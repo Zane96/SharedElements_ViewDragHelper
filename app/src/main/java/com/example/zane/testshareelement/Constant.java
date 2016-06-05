@@ -6,6 +6,6 @@ package com.example.zane.testshareelement;
  */
 
 public class Constant {
-    public static final String URL_1 = "http://i.imgur.com/TaFnVAP.jpg";
+    public static final String URL_1 = "http://i.imgur.com/SBXnqun.jpg";
     public static final String URL_2 = "http://i.imgur.com/RMCqfPu.jpg";
 }
