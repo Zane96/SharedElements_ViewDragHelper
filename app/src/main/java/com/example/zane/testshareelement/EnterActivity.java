@@ -99,7 +99,7 @@ public class EnterActivity extends AppCompatActivity{
                 return true;
             }
         });
-        
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -121,7 +121,6 @@ public class EnterActivity extends AppCompatActivity{
                         sharedElements.clear();
                     }
                 } else {
-                    textView.setAlpha(0f);
                     Log.i(TAG, "enter");
                 }
             }
